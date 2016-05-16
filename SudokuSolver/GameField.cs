@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 
 namespace SudokuSolver
 {
     public class GameField : IGameField
     {
-        public int Height => state.Length;
-        public int Width => Height == 0 ? 0 : state[0].Length;
+        public int Width => state.Length;
+        public int Height => Width == 0 ? 0 : state[0].Length;
 
         private readonly int[][] state;
 
@@ -24,7 +25,8 @@ namespace SudokuSolver
 
         public IEnumerable<int> GetRow(int rowIndex)
         {
-            return state[rowIndex];
+            return Enumerable.Range(0, Width)
+                .Select(columnIndex => state[columnIndex][rowIndex]);
         }
 
         public IEnumerable<int> GetColumn(int columnIndex)
