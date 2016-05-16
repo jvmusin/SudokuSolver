@@ -22,16 +22,16 @@ namespace SudokuSolver
 
         public bool Filled => !state.Any(x => x.Contains(0));
 
-        public IEnumerable<int> GetRow(int rowIndex)
+        public IEnumerable<int> GetRow(int y)
         {
             return Enumerable.Range(0, Width)
-                .Select(columnIndex => state[columnIndex][rowIndex]);
+                .Select(x => state[x][y]);
         }
 
-        public IEnumerable<int> GetColumn(int columnIndex)
+        public IEnumerable<int> GetColumn(int x)
         {
             return Enumerable.Range(0, Height)
-                .Select(rowIndex => state[columnIndex][rowIndex]);
+                .Select(y => state[x][y]);
         }
 
         public GameField(int width, int height)

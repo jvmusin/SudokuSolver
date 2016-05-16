@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -48,7 +46,8 @@ namespace SudokuSolver.Tests
             foreach (var y in Enumerable.Range(0, field.Height))
             {
                 var row = field.GetRow(y).ToList();
-                for (var x = 0; x < row.Count; x++)
+                row.Count.Should().Be(field.Width);
+                foreach (var x in Enumerable.Range(0, field.Width))
                     row[x].Should().Be(Indexer(field, x, y));
             }
         }
@@ -61,7 +60,8 @@ namespace SudokuSolver.Tests
             foreach (var x in Enumerable.Range(0, field.Width))
             {
                 var column = field.GetColumn(x).ToList();
-                for (var y = 0; y < column.Count; y++)
+                column.Count.Should().Be(field.Height);
+                foreach (var y in Enumerable.Range(0, field.Height))
                     column[y].Should().Be(Indexer(field, x, y));
             }
         }

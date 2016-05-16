@@ -10,8 +10,8 @@ namespace SudokuSolver
         int GetElementAt(int x, int y);
         IGameField SetElementAt(int x, int y, int value);
 
-        IEnumerable<int> GetRow(int rowIndex);
-        IEnumerable<int> GetColumn(int columnIndex);  
+        IEnumerable<int> GetRow(int y);
+        IEnumerable<int> GetColumn(int x);
 
         bool Filled { get; }
     }
