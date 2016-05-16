@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SudokuSolver
@@ -21,6 +22,17 @@ namespace SudokuSolver
 
         public bool IsFilled => !state.Any(x => x.Contains(0));
 
+        public IEnumerable<int> GetRow(int rowIndex)
+        {
+            return state[rowIndex];
+        }
+
+        public IEnumerable<int> GetColumn(int columnIndex)
+        {
+            return Enumerable.Range(0, Height)
+                .Select(rowIndex => state[columnIndex][rowIndex]);
+        }
+
         public GameField(int width, int height)
         {
             state = Enumerable
@@ -35,6 +47,8 @@ namespace SudokuSolver
                 foreach (var y in Enumerable.Range(0, Height))
                     state[x][y] = source.GetElementAt(x, y);
         }
+
+        #region Equals and HashCode
 
         protected bool Equals(IGameField other)
         {
@@ -58,5 +72,7 @@ namespace SudokuSolver
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }
