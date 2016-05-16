@@ -13,6 +13,6 @@ namespace SudokuSolver
         IEnumerable<int> GetRow(int rowIndex);
         IEnumerable<int> GetColumn(int columnIndex);  
 
-        bool IsFilled { get; }
+        bool Filled { get; }
     }
 }

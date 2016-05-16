@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -8,16 +9,14 @@ namespace SudokuSolver.Tests
     [TestFixture]
     public class GameField_Should : TestBase
     {
-        private GameField field;
-        private static readonly Func<IGameField, int, int, int> Indexer 
-            = (field0, x, y) => y*field0.Width + x;
+        private IGameField field;
 
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
 
-            field = new GameField(5, 3);
+            field = new GameField(5, 6);
         }
 
         [Test]
@@ -34,8 +33,6 @@ namespace SudokuSolver.Tests
         [Test]
         public void RememberCellValuesCorrectly()
         {
-            IGameField field = this.field;
-
             Fill(ref field, Indexer);
 
             foreach (var x in Enumerable.Range(0, field.Width))
@@ -46,8 +43,6 @@ namespace SudokuSolver.Tests
         [Test]
         public void ReturnRealValuesOnGetRow()
         {
-            IGameField field = this.field;
-
             Fill(ref field, Indexer);
 
             foreach (var y in Enumerable.Range(0, field.Height))
@@ -61,8 +56,6 @@ namespace SudokuSolver.Tests
         [Test]
         public void ReturnRealValuesOnGetColumn()
         {
-            IGameField field = this.field;
-
             Fill(ref field, Indexer);
 
             foreach (var x in Enumerable.Range(0, field.Width))
@@ -74,11 +67,29 @@ namespace SudokuSolver.Tests
         }
 
         [Test]
-        public void HaveZeroCellValues_ByDefault()
+        public void HaveZeroValues_ByDefault()
         {
             Enumerable.Range(0, field.Width)
                 .SelectMany(y => field.GetColumn(y))
                 .ShouldAllBeEquivalentTo(0);
+        }
+
+        [Test]
+        public void SayThatItsNotFilled_WhenThereAreSomeZeroCells()
+        {
+            Fill(ref field, Indexer);
+            field = field
+                .SetElementAt(2, 3, 0)
+                .SetElementAt(0, 0, 0);
+            field.Filled.Should().BeFalse();
+        }
+
+        [Test]
+        public void SayThatItsFilled_WhenThereAreNoZeroCells()
+        {
+            Fill(ref field, Indexer);
+            field = field.SetElementAt(0, 0, 1);
+            field.Filled.Should().BeTrue();
         }
     }
 }

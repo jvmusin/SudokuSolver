@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 
 namespace SudokuSolver
 {
@@ -21,7 +20,7 @@ namespace SudokuSolver
             return result;
         }
 
-        public bool IsFilled => !state.Any(x => x.Contains(0));
+        public bool Filled => !state.Any(x => x.Contains(0));
 
         public IEnumerable<int> GetRow(int rowIndex)
         {
@@ -48,6 +47,13 @@ namespace SudokuSolver
             foreach (var x in Enumerable.Range(0, Width))
                 foreach (var y in Enumerable.Range(0, Height))
                     state[x][y] = source.GetElementAt(x, y);
+        }
+
+        public override string ToString()
+        {
+            var rows = Enumerable.Range(0, Height)
+                .Select(y => string.Join(" ", GetRow(y)));
+            return string.Join("\n", rows);
         }
 
         #region Equals and HashCode
