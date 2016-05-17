@@ -32,7 +32,7 @@ namespace SudokuSolver.Tests
         }
 
         [Test, Combinatorial]
-        public void Fail_WhenSizeIsNotCorrect(
+        public void FailCreating_WhenSizeIsNotCorrect(
             [Values(-5, 0, 5)] int width,
             [Values(-6, 0, 6)] int height)
         {
