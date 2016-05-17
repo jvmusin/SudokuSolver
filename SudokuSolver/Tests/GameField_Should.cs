@@ -31,7 +31,7 @@ namespace SudokuSolver.Tests
             field.Height.Should().Be(height);
         }
 
-        [Test]
+        [Test, Combinatorial]
         public void Fail_WhenSizeIsNotCorrect(
             [Values(-5, 0, 5)] int width,
             [Values(-6, 0, 6)] int height)
