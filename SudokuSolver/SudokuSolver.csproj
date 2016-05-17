@@ -65,9 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameField.cs" />
+    <Compile Include="GameFieldExtensions.cs" />
     <Compile Include="GameFieldHasher.cs" />
     <Compile Include="IGameField.cs" />
     <Compile Include="IGameFieldHasher.cs" />
+    <Compile Include="ISolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solver.cs" />

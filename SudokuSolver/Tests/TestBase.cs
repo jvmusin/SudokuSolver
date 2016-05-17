@@ -14,13 +14,6 @@ namespace SudokuSolver.Tests
         {
         }
 
-        protected static void Fill(ref IGameField field, Func<int, int, int> getNumber)
-        {
-            foreach (var row in Enumerable.Range(0, field.Height))
-                foreach (var column in Enumerable.Range(0, field.Width))
-                    field = field.SetElementAt(row, column, getNumber(row, column));
-        }
-
         protected static IGameField GameFieldFromLines(IEnumerable<string> lines)
         {
             var fieldData = lines

@@ -9,7 +9,7 @@ namespace SudokuSolver.Tests
     public class GameField_Should : TestBase
     {
         private IGameField field;
-        private Func<int, int, int> byRowEnumerator;
+        private Func<int, int, int> byRowNumerator;
 
         [SetUp]
         public override void SetUp()
@@ -17,7 +17,7 @@ namespace SudokuSolver.Tests
             base.SetUp();
 
             field = new GameField(5, 6);
-            byRowEnumerator = GetByRowEnumerator(field);
+            byRowNumerator = GetByRowEnumerator(field);
         }
 
         [Test]
@@ -45,38 +45,38 @@ namespace SudokuSolver.Tests
         [Test]
         public void RememberCellValuesCorrectly()
         {
-            Fill(ref field, byRowEnumerator);
+            field = field.Fill(byRowNumerator);
 
             foreach (var row in Enumerable.Range(0, field.Height))
                 foreach (var column in Enumerable.Range(0, field.Width))
-                    field.GetElementAt(row, column).Should().Be(byRowEnumerator(row, column));
+                    field.GetElementAt(row, column).Should().Be(byRowNumerator(row, column));
         }
 
         [Test]
         public void ReturnRealValuesOnGetRow()
         {
-            Fill(ref field, byRowEnumerator);
+            field = field.Fill(byRowNumerator);
 
             foreach (var row in Enumerable.Range(0, field.Height))
             {
                 var rowValues = field.GetRow(row).ToList();
                 rowValues.Count.Should().Be(field.Width);
                 foreach (var column in Enumerable.Range(0, field.Width))
-                    rowValues[column].Should().Be(byRowEnumerator(row, column));
+                    rowValues[column].Should().Be(byRowNumerator(row, column));
             }
         }
 
         [Test]
         public void ReturnRealValuesOnGetColumn()
         {
-            Fill(ref field, byRowEnumerator);
+            field = field.Fill(byRowNumerator);
 
             foreach (var column in Enumerable.Range(0, field.Width))
             {
                 var columnValues = field.GetColumn(column).ToList();
                 columnValues.Count.Should().Be(field.Height);
                 foreach (var row in Enumerable.Range(0, field.Height))
-                    columnValues[row].Should().Be(byRowEnumerator(row, column));
+                    columnValues[row].Should().Be(byRowNumerator(row, column));
             }
         }
 
@@ -97,7 +97,7 @@ namespace SudokuSolver.Tests
         [Test]
         public void SayThatItsNotFilled_WhenThereAreSomeZeroCells()
         {
-            Fill(ref field, byRowEnumerator);
+            field = field.Fill(byRowNumerator);
             field = field
                 .SetElementAt(2, 3, 0)
                 .SetElementAt(0, 0, 0);
@@ -107,7 +107,7 @@ namespace SudokuSolver.Tests
         [Test]
         public void SayThatItsFilled_WhenThereAreNoZeroCells()
         {
-            Fill(ref field, byRowEnumerator);
+            field = field.Fill(byRowNumerator);
             field = field.SetElementAt(0, 0, 1);
             field.Filled.Should().BeTrue();
         }
