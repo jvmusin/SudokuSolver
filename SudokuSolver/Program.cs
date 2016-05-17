@@ -6,7 +6,7 @@ namespace SudokuSolver
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine(new GameField(5, 5).SetElementAt(0, 0, 100500).SetElementAt(4, 4, 100500));
+            Console.WriteLine(new GameField(5, 6).SetElementAt(0, 0, 1).SetElementAt(4, 5, 2));
 //            Console.WriteLine(123);
         }
     }

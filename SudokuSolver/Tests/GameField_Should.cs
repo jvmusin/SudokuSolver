@@ -9,7 +9,7 @@ namespace SudokuSolver.Tests
     public class GameField_Should : TestBase
     {
         private IGameField field;
-        private Func<int, int,int> byRowEnumerator;
+        private Func<int, int, int> byRowEnumerator;
 
         [SetUp]
         public override void SetUp()
@@ -17,18 +17,18 @@ namespace SudokuSolver.Tests
             base.SetUp();
 
             field = new GameField(5, 6);
-            byRowEnumerator = GetRowEnumerator(field);
+            byRowEnumerator = GetByRowEnumerator(field);
         }
 
         [Test]
         public void SaySizeCorrectly_WhenSizeIsCorrect()
         {
-            var width = 6;
             var height = 5;
-            field = new GameField(width, height);
+            var width = 6;
+            field = new GameField(height, width);
 
-            field.Width.Should().Be(width);
             field.Height.Should().Be(height);
+            field.Width.Should().Be(width);
         }
 
         [Test, Combinatorial]
@@ -36,9 +36,9 @@ namespace SudokuSolver.Tests
             [Values(-5, 0, 5)] int width,
             [Values(-6, 0, 6)] int height)
         {
-            if (width > 0 && height > 0)
+            if (height > 0 && width > 0)
                 return;
-            Action create = () => new GameField(width, height);
+            Action create = () => new GameField(height, width);
             create.ShouldThrow<Exception>();
         }
 
@@ -47,9 +47,9 @@ namespace SudokuSolver.Tests
         {
             Fill(ref field, byRowEnumerator);
 
-            foreach (var x in Enumerable.Range(0, field.Width))
-                foreach (var y in Enumerable.Range(0, field.Height))
-                    field.GetElementAt(x, y).Should().Be(byRowEnumerator(x, y));
+            foreach (var row in Enumerable.Range(0, field.Height))
+                foreach (var column in Enumerable.Range(0, field.Width))
+                    field.GetElementAt(row, column).Should().Be(byRowEnumerator(row, column));
         }
 
         [Test]
@@ -57,12 +57,12 @@ namespace SudokuSolver.Tests
         {
             Fill(ref field, byRowEnumerator);
 
-            foreach (var y in Enumerable.Range(0, field.Height))
+            foreach (var row in Enumerable.Range(0, field.Height))
             {
-                var row = field.GetRow(y).ToList();
-                row.Count.Should().Be(field.Width);
-                foreach (var x in Enumerable.Range(0, field.Width))
-                    row[x].Should().Be(byRowEnumerator(x, y));
+                var rowValues = field.GetRow(row).ToList();
+                rowValues.Count.Should().Be(field.Width);
+                foreach (var column in Enumerable.Range(0, field.Width))
+                    rowValues[column].Should().Be(byRowEnumerator(row, column));
             }
         }
 
@@ -71,20 +71,20 @@ namespace SudokuSolver.Tests
         {
             Fill(ref field, byRowEnumerator);
 
-            foreach (var x in Enumerable.Range(0, field.Width))
+            foreach (var column in Enumerable.Range(0, field.Width))
             {
-                var column = field.GetColumn(x).ToList();
-                column.Count.Should().Be(field.Height);
-                foreach (var y in Enumerable.Range(0, field.Height))
-                    column[y].Should().Be(byRowEnumerator(x, y));
+                var columnValues = field.GetColumn(column).ToList();
+                columnValues.Count.Should().Be(field.Height);
+                foreach (var row in Enumerable.Range(0, field.Height))
+                    columnValues[row].Should().Be(byRowEnumerator(row, column));
             }
         }
 
         [Test]
         public void HaveZeroValues_ByDefault()
         {
-            Enumerable.Range(0, field.Width)
-                .SelectMany(y => field.GetColumn(y))
+            Enumerable.Range(0, field.Height)
+                .SelectMany(row => field.GetRow(row))
                 .ShouldAllBeEquivalentTo(0);
         }
 

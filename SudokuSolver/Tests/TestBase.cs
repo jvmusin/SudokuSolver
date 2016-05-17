@@ -16,9 +16,9 @@ namespace SudokuSolver.Tests
 
         protected static void Fill(ref IGameField field, Func<int, int, int> getNumber)
         {
-            foreach (var x in Enumerable.Range(0, field.Width))
-                foreach (var y in Enumerable.Range(0, field.Height))
-                    field = field.SetElementAt(x, y, getNumber(x, y));
+            foreach (var row in Enumerable.Range(0, field.Height))
+                foreach (var column in Enumerable.Range(0, field.Width))
+                    field = field.SetElementAt(row, column, getNumber(row, column));
         }
 
         protected static IGameField GameFieldFromLines(IEnumerable<string> lines)
@@ -26,17 +26,18 @@ namespace SudokuSolver.Tests
             var fieldData = lines
                 .Select(line => line.Split(' ').Select(int.Parse).ToList())
                 .ToList();
-            var width = fieldData[0].Count;
             var height = fieldData.Count;
-            IGameField field = new GameField(width, height);
+            var width = fieldData[0].Count;
+            IGameField field = new GameField(height, width);
 
-            foreach (var x in Enumerable.Range(0, width))
-                foreach (var y in Enumerable.Range(0, height))
-                    field = field.SetElementAt(x, y, fieldData[y][x]);
+            foreach (var row in Enumerable.Range(0, height))
+                foreach (var column in Enumerable.Range(0, width))
+                    field = field.SetElementAt(row, column, fieldData[row][column]);
 
             return field;
         }
 
-        protected Func<int, int, int> GetRowEnumerator(IGameField field) => (x, y) => y*field.Width + x;
+        protected Func<int, int, int> GetByRowEnumerator(IGameField field)
+            => (row, column) => row * field.Width + column;
     }
 }

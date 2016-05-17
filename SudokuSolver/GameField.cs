@@ -6,55 +6,56 @@ namespace SudokuSolver
 {
     public class GameField : IGameField
     {
-        public int Width => state.Length;
-        public int Height => Width == 0 ? 0 : state[0].Length;
+        public int Height => state.Length;
+        public int Width => state[0].Length;
 
         private readonly int[][] state;
 
-        public int GetElementAt(int x, int y) => state[x][y];
+        public int GetElementAt(int row, int column) => state[row][column];
 
-        public IGameField SetElementAt(int x, int y, int value)
+        public IGameField SetElementAt(int row, int column, int value)
         {
             var result = new GameField(this);
-            result.state[x][y] = value;
+            result.state[row][column] = value;
             return result;
         }
 
         public bool Filled => !state.Any(x => x.Contains(0));
 
-        public IEnumerable<int> GetRow(int y)
+        public IEnumerable<int> GetRow(int row)
         {
             return Enumerable.Range(0, Width)
-                .Select(x => state[x][y]);
+                .Select(column => state[row][column]);
         }
 
-        public IEnumerable<int> GetColumn(int x)
+        public IEnumerable<int> GetColumn(int column)
         {
             return Enumerable.Range(0, Height)
-                .Select(y => state[x][y]);
+                .Select(row => state[row][column]);
         }
 
-        public GameField(int width, int height)
+        public GameField(int height, int width)
         {
             if (width <= 0 || height <= 0)
                 throw new ArgumentOutOfRangeException("Size is not correct");
+
             state = Enumerable
-                .Range(0, width)
-                .Select(x => new int[height])
+                .Range(0, height)
+                .Select(x => new int[width])
                 .ToArray();
         }
 
-        public GameField(IGameField source) : this(source.Width, source.Height)
+        public GameField(IGameField source) : this(source.Height, source.Width)
         {
-            foreach (var x in Enumerable.Range(0, Width))
-                foreach (var y in Enumerable.Range(0, Height))
-                    state[x][y] = source.GetElementAt(x, y);
+            foreach (var row in Enumerable.Range(0, Height))
+                foreach (var column in Enumerable.Range(0, Width))
+                    state[row][column] = source.GetElementAt(row, column);
         }
 
         public override string ToString()
         {
             var rows = Enumerable.Range(0, Height)
-                .Select(y => string.Join(" ", GetRow(y)));
+                .Select(row => string.Join(" ", GetRow(row)));
             return string.Join("\n", rows);
         }
 
@@ -65,9 +66,9 @@ namespace SudokuSolver
             if (Height != other.Height || Width != other.Width)
                 return false;
             var haveDifferentCells = (
-                from x in Enumerable.Range(0, Width)
-                from y in Enumerable.Range(0, Height)
-                where state[x][y] != other.GetElementAt(x, y)
+                from row in Enumerable.Range(0, Height)
+                from column in Enumerable.Range(0, Width)
+                where state[row][column] != other.GetElementAt(row, column)
                 select true).Any();
             return !haveDifferentCells;
         }

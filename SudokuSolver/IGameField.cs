@@ -7,11 +7,11 @@ namespace SudokuSolver
         int Height { get; }
         int Width { get; }
 
-        int GetElementAt(int x, int y);
-        IGameField SetElementAt(int x, int y, int value);
+        int GetElementAt(int row, int column);
+        IGameField SetElementAt(int row, int column, int value);
 
-        IEnumerable<int> GetRow(int y);
-        IEnumerable<int> GetColumn(int x);
+        IEnumerable<int> GetRow(int row);
+        IEnumerable<int> GetColumn(int column);
 
         bool Filled { get; }
     }
