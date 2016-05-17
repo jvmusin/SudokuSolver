@@ -36,6 +36,8 @@ namespace SudokuSolver
 
         public GameField(int width, int height)
         {
+            if (width <= 0 || height <= 0)
+                throw new ArgumentOutOfRangeException("Size is not correct");
             state = Enumerable
                 .Range(0, width)
                 .Select(x => new int[height])

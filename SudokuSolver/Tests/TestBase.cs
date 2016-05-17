@@ -8,19 +8,17 @@ namespace SudokuSolver.Tests
     public abstract class TestBase
     {
         protected readonly Random rnd = new Random();
-        protected static readonly Func<IGameField, int, int, int> Indexer
-            = (field0, x, y) => y * field0.Width + x;
 
         [SetUp]
         public virtual void SetUp()
         {
         }
 
-        protected static void Fill(ref IGameField field, Func<IGameField, int, int, int> getNumber)
+        protected static void Fill(ref IGameField field, Func<int, int, int> getNumber)
         {
             foreach (var x in Enumerable.Range(0, field.Width))
                 foreach (var y in Enumerable.Range(0, field.Height))
-                    field = field.SetElementAt(x, y, getNumber(field, x, y));
+                    field = field.SetElementAt(x, y, getNumber(x, y));
         }
 
         protected static IGameField GameFieldFromLines(IEnumerable<string> lines)
@@ -38,5 +36,7 @@ namespace SudokuSolver.Tests
 
             return field;
         }
+
+        protected Func<int, int, int> GetRowEnumerator(IGameField field) => (x, y) => y*field.Width + x;
     }
 }
