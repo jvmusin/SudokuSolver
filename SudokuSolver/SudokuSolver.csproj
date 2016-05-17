@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CellPosition.cs" />
     <Compile Include="GameField.cs" />
     <Compile Include="GameFieldExtensions.cs" />
     <Compile Include="GameFieldHasher.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="ISolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Solver.cs" />
+    <Compile Include="ClassicSudokuSolver.cs" />
     <Compile Include="Tests\GameField_Should.cs" />
     <Compile Include="Tests\TestBase.cs" />
   </ItemGroup>
@@ -80,6 +81,15 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Samples\ClassicSudokuSample1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\ClassicSudokuSample1Solution.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

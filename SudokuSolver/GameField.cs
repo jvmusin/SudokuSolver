@@ -13,11 +13,21 @@ namespace SudokuSolver
 
         public int GetElementAt(int row, int column) => state[row][column];
 
+        public int GetElementAt(CellPosition position)
+        {
+            return GetElementAt(position.Row, position.Column);
+        }
+
         public IGameField SetElementAt(int row, int column, int value)
         {
             var result = new GameField(this);
             result.state[row][column] = value;
             return result;
+        }
+
+        public IGameField SetElementAt(CellPosition position, int value)
+        {
+            return SetElementAt(position.Row, position.Column, value);
         }
 
         public bool Filled => !state.Any(x => x.Contains(0));

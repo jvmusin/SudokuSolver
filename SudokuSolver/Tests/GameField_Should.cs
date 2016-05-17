@@ -111,5 +111,11 @@ namespace SudokuSolver.Tests
             field = field.SetElementAt(0, 0, 1);
             field.Filled.Should().BeTrue();
         }
+
+        [Test]
+        public void ReturnGameFieldClass_OnSetElementAtMethod()
+        {
+            field.SetElementAt(0, 0, 123).GetType().Should().Be<GameField>();
+        }
     }
 }
