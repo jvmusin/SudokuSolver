@@ -17,7 +17,7 @@ namespace SudokuSolver.Tests
             base.SetUp();
 
             field = new GameField(5, 6);
-            byRowNumerator = GetByRowEnumerator(field);
+            byRowNumerator = (row, column) => row * field.Width + column;
         }
 
         [Test]
@@ -33,8 +33,8 @@ namespace SudokuSolver.Tests
 
         [Test, Combinatorial]
         public void FailCreating_WhenSizeIsNotCorrect(
-            [Values(-5, 0, 5)] int width,
-            [Values(-6, 0, 6)] int height)
+            [Values(-6, 0, 6)] int height,
+            [Values(-5, 0, 5)] int width)
         {
             if (height > 0 && width > 0)
                 return;
@@ -46,6 +46,7 @@ namespace SudokuSolver.Tests
         public void RememberCellValuesCorrectly()
         {
             field = field.Fill(byRowNumerator);
+
             foreach (var position in field.EnumerateCellPositions())
             {
                 var row = position.Row;

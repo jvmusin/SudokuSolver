@@ -26,13 +26,17 @@ namespace SudokuSolver
 
             foreach (var position in field.EnumerateCellPositions())
             {
+                if (field.GetElementAt(position) != 0)
+                    continue;
+
                 var availableNumbers = GetAvailableNumbers(field, position);
-                var allSolutions = availableNumbers
+                var solutions = availableNumbers
                     .Select(newNumber => field.SetElementAt(position, newNumber))
                     .SelectMany(FindSolutions).ToList();
 
-                foreach (var solution in allSolutions)
+                foreach (var solution in solutions)
                     yield return solution;
+                yield break;
             }
         }
 
@@ -48,16 +52,13 @@ namespace SudokuSolver
             var topLeftColumn = column / 3;
 
             var numbersInSquare = GetNumbersInSquare(field, topLeftRow, topLeftColumn).ToList();
-            var numbersInRow = field.GetRow(row).ToList();
-            var numersInColumn = field.GetColumn(column).ToList();
+            var numbersInRow = field.GetRow(row);
+            var numersInColumn = field.GetColumn(column);
 
-            var result = Enumerable.Range(1, 9)
+            return Enumerable.Range(1, 9)
                 .Except(numbersInSquare)
                 .Except(numbersInRow)
-                .Except(numersInColumn)
-                .ToList();
-
-            return result;
+                .Except(numersInColumn);
         }
 
         private static IEnumerable<int> GetNumbersInSquare(IGameField field, int topLeftRow, int topLeftColumn)

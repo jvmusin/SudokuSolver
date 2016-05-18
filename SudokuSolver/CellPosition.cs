@@ -11,7 +11,7 @@
             Column = column;
         }
 
-        public bool Equals(CellPosition other)
+        protected bool Equals(CellPosition other)
         {
             return
                 Row == other.Row &&

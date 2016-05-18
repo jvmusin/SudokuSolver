@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 
 namespace SudokuSolver.Tests
@@ -13,8 +11,5 @@ namespace SudokuSolver.Tests
         public virtual void SetUp()
         {
         }
-
-        protected Func<int, int, int> GetByRowEnumerator(IGameField field)
-            => (row, column) => row * field.Width + column;
     }
 }
