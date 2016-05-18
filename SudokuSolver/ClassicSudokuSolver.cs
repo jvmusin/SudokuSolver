@@ -52,7 +52,7 @@ namespace SudokuSolver
 
         private IEnumerable<int> GetAvailableNumbers(IGameField field, CellPosition position)
         {
-            var numbersInSquare = GetNumbersInSquare(field, position);
+            var numbersInSquare = GetNumbersInBlock(field, position);
             var numbersInRow = field.GetRow(position.Row);
             var numbersInColumn = field.GetColumn(position.Column);
 
@@ -62,7 +62,7 @@ namespace SudokuSolver
                 .Except(numbersInColumn);
         }
 
-        private IEnumerable<int> GetNumbersInSquare(IGameField field, CellPosition position)
+        private IEnumerable<int> GetNumbersInBlock(IGameField field, CellPosition position)
         {
             var topLeftRow = position.Row / BlockHeight;
             var topLeftColumn = position.Column / BlockWidth;
