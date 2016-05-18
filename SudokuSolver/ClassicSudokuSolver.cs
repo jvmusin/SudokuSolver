@@ -5,6 +5,16 @@ namespace SudokuSolver
 {
     public class ClassicSudokuSolver : ISolver
     {
+        public int BlockHeight { get; protected set; }
+        public int BlockWidth { get; protected set; }
+        public int MaxNumber => BlockHeight * BlockWidth;
+
+        public ClassicSudokuSolver(int blockHeight, int blockWidth)
+        {
+            BlockHeight = blockHeight;
+            BlockWidth = blockWidth;
+        }
+
         public IEnumerable<IGameField> GetAllSolutions(IGameField startState)
         {
             return FindSolutions(startState);
@@ -16,7 +26,7 @@ namespace SudokuSolver
             return solution.Any() ? solution.First() : null;
         }
 
-        private static IEnumerable<IGameField> FindSolutions(IGameField field)
+        private IEnumerable<IGameField> FindSolutions(IGameField field)
         {
             if (field.Filled)
             {
@@ -32,7 +42,7 @@ namespace SudokuSolver
                 var availableNumbers = GetAvailableNumbers(field, position);
                 var solutions = availableNumbers
                     .Select(newNumber => field.SetElementAt(position, newNumber))
-                    .SelectMany(FindSolutions).ToList();
+                    .SelectMany(FindSolutions);
 
                 foreach (var solution in solutions)
                     yield return solution;
@@ -40,29 +50,22 @@ namespace SudokuSolver
             }
         }
 
-        private static IEnumerable<int> GetAvailableNumbers(IGameField field, CellPosition position)
+        private IEnumerable<int> GetAvailableNumbers(IGameField field, CellPosition position)
         {
-            if (field.GetElementAt(position) != 0)
-                return Enumerable.Empty<int>();
+            var numbersInSquare = GetNumbersInSquare(field, position);
+            var numbersInRow = field.GetRow(position.Row);
+            var numbersInColumn = field.GetColumn(position.Column);
 
-            var row = position.Row;
-            var column = position.Column;
-
-            var topLeftRow = row / 3;
-            var topLeftColumn = column / 3;
-
-            var numbersInSquare = GetNumbersInSquare(field, topLeftRow, topLeftColumn).ToList();
-            var numbersInRow = field.GetRow(row);
-            var numersInColumn = field.GetColumn(column);
-
-            return Enumerable.Range(1, 9)
+            return Enumerable.Range(1, MaxNumber)
                 .Except(numbersInSquare)
                 .Except(numbersInRow)
-                .Except(numersInColumn);
+                .Except(numbersInColumn);
         }
 
-        private static IEnumerable<int> GetNumbersInSquare(IGameField field, int topLeftRow, int topLeftColumn)
+        private IEnumerable<int> GetNumbersInSquare(IGameField field, CellPosition position)
         {
+            var topLeftRow = position.Row / BlockHeight;
+            var topLeftColumn = position.Column / BlockWidth;
             foreach (var row in Enumerable.Range(topLeftRow, 3))
                 foreach (var column in Enumerable.Range(topLeftColumn, 3))
                 {
