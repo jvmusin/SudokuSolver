@@ -29,13 +29,8 @@ namespace SudokuSolver
                 .ToList();
             var height = fieldData.Count;
             var width = fieldData[0].Count;
-            IGameField field = new GameField(height, width);
 
-            foreach (var row in Enumerable.Range(0, height))
-                foreach (var column in Enumerable.Range(0, width))
-                    field = field.SetElementAt(row, column, fieldData[row][column]);
-
-            return field;
+            return new GameField(height, width, (row, column) => fieldData[row][column]);
         }
     }
 }

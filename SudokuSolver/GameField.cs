@@ -32,6 +32,17 @@ namespace SudokuSolver
                 .ToArray();
         }
 
+        public GameField(int height, int width, Func<int, int, int> numerator) : this(height, width)
+        {
+            foreach (var position in this.EnumerateCellPositions())
+            {
+                var row = position.Row;
+                var column = position.Column;
+                var number = numerator(row, column);
+                state[row][column] = number;
+            }
+        }
+
         public GameField(IGameField source) : this(source.Height, source.Width)
         {
             foreach (var position in source.EnumerateCellPositions())

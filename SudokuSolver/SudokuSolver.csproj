@@ -86,7 +86,7 @@
     <Content Include="Samples\ClassicSudokuSample1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Samples\ClassicSudokuSample1Solution.txt">
+    <Content Include="Samples\ClassicSudokuSample1Solved.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
