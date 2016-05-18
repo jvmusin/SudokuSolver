@@ -66,8 +66,8 @@ namespace SudokuSolver
         {
             var topLeftRow = position.Row / BlockHeight;
             var topLeftColumn = position.Column / BlockWidth;
-            foreach (var row in Enumerable.Range(topLeftRow, 3))
-                foreach (var column in Enumerable.Range(topLeftColumn, 3))
+            foreach (var row in Enumerable.Range(topLeftRow, BlockHeight))
+                foreach (var column in Enumerable.Range(topLeftColumn, BlockWidth))
                 {
                     var value = field.GetElementAt(row, column);
                     if (value != 0)
