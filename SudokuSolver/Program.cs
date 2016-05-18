@@ -12,7 +12,7 @@ namespace SudokuSolver
             var testFileName = "Samples/ClassicSudokuSample1.txt";
             var field = GameFieldFromLines(File.ReadLines(testFileName));
             var solver = new ClassicSudokuSolver();
-            var solutions = solver.GetAllSolutions(field);
+            var solutions = solver.GetAllSolutions(field).ToList();
             foreach (var solution in solutions)
             {
                 Console.WriteLine(solution);

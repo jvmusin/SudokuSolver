@@ -7,9 +7,7 @@ namespace SudokuSolver
     {
         public IEnumerable<IGameField> GetAllSolutions(IGameField startState)
         {
-            return startState.Filled
-                ? new[] { startState }
-                : FindSolutions(startState);
+            return FindSolutions(startState);
         }
 
         public IGameField GetSolution(IGameField startState)
@@ -31,7 +29,7 @@ namespace SudokuSolver
                 var availableNumbers = GetAvailableNumbers(field, position);
                 var allSolutions = availableNumbers
                     .Select(newNumber => field.SetElementAt(position, newNumber))
-                    .SelectMany(FindSolutions);
+                    .SelectMany(FindSolutions).ToList();
 
                 foreach (var solution in allSolutions)
                     yield return solution;
@@ -40,29 +38,32 @@ namespace SudokuSolver
 
         private static IEnumerable<int> GetAvailableNumbers(IGameField field, CellPosition position)
         {
+            if (field.GetElementAt(position) != 0)
+                return Enumerable.Empty<int>();
+
             var row = position.Row;
             var column = position.Column;
-
-            if (field.GetElementAt(row, column) != 0)
-                return Enumerable.Empty<int>();
 
             var topLeftRow = row / 3;
             var topLeftColumn = column / 3;
 
             var numbersInSquare = GetNumbersInSquare(field, topLeftRow, topLeftColumn).ToList();
-            var numbersInRow = field.GetRow(row);
-            var numersInColumn = field.GetColumn(column);
+            var numbersInRow = field.GetRow(row).ToList();
+            var numersInColumn = field.GetColumn(column).ToList();
 
-            return Enumerable.Range(0, 9)
+            var result = Enumerable.Range(1, 9)
                 .Except(numbersInSquare)
                 .Except(numbersInRow)
-                .Except(numersInColumn);
+                .Except(numersInColumn)
+                .ToList();
+
+            return result;
         }
 
         private static IEnumerable<int> GetNumbersInSquare(IGameField field, int topLeftRow, int topLeftColumn)
         {
-            foreach (var row in Enumerable.Range(topLeftRow, topLeftRow + 3))
-                foreach (var column in Enumerable.Range(topLeftColumn, topLeftColumn + 3))
+            foreach (var row in Enumerable.Range(topLeftRow, 3))
+                foreach (var column in Enumerable.Range(topLeftColumn, 3))
                 {
                     var value = field.GetElementAt(row, column);
                     if (value != 0)
