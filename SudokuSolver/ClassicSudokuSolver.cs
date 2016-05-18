@@ -52,17 +52,17 @@ namespace SudokuSolver
 
         private IEnumerable<int> GetAvailableNumbers(IGameField field, CellPosition position)
         {
-            var numbersInSquare = GetNumbersInBlock(field, position);
+            var numbersInBlock = GetBlock(field, position);
             var numbersInRow = field.GetRow(position.Row);
             var numbersInColumn = field.GetColumn(position.Column);
 
             return Enumerable.Range(1, MaxNumber)
-                .Except(numbersInSquare)
+                .Except(numbersInBlock)
                 .Except(numbersInRow)
                 .Except(numbersInColumn);
         }
 
-        private IEnumerable<int> GetNumbersInBlock(IGameField field, CellPosition position)
+        private IEnumerable<int> GetBlock(IGameField field, CellPosition position)
         {
             var topLeftRow = position.Row / BlockHeight;
             var topLeftColumn = position.Column / BlockWidth;
