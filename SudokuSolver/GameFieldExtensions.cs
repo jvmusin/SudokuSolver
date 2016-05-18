@@ -25,5 +25,27 @@ namespace SudokuSolver
                 from column in Enumerable.Range(0, field.Width)
                 select new CellPosition(row, column);
         }
+        
+        public static int GetElementAt(this IGameField field, CellPosition position)
+        {
+            return field.GetElementAt(position.Row, position.Column);
+        }
+        
+        public static IGameField SetElementAt(this IGameField field, CellPosition position, int value)
+        {
+            return field.SetElementAt(position.Row, position.Column, value);
+        }
+
+        public static IEnumerable<int> GetRow(this IGameField field, int row)
+        {
+            return Enumerable.Range(0, field.Width)
+                .Select(column => field.GetElementAt(row, column));
+        }
+
+        public static IEnumerable<int> GetColumn(this IGameField field, int column)
+        {
+            return Enumerable.Range(0, field.Height)
+                .Select(row => field.GetElementAt(row, column));
+        }
     }
 }

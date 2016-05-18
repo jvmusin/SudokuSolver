@@ -46,10 +46,12 @@ namespace SudokuSolver.Tests
         public void RememberCellValuesCorrectly()
         {
             field = field.Fill(byRowNumerator);
-
-            foreach (var row in Enumerable.Range(0, field.Height))
-                foreach (var column in Enumerable.Range(0, field.Width))
-                    field.GetElementAt(row, column).Should().Be(byRowNumerator(row, column));
+            foreach (var position in field.EnumerateCellPositions())
+            {
+                var row = position.Row;
+                var column = position.Column;
+                field.GetElementAt(row, column).Should().Be(byRowNumerator(row, column));
+            }
         }
 
         [Test]
