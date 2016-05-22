@@ -6,19 +6,19 @@ namespace SudokuSolver
 {
     public static class GameFieldExtensions
     {
-        public static IGameField Fill(this IGameField field, Func<int, int, int> numerator)
+        public static IGameField<T> Fill<T>(this IGameField<T> field, Func<int, int, T> getNumber)
         {
             foreach (var position in field.EnumerateCellPositions())
             {
                 var row = position.Row;
                 var column = position.Column;
-                var number = numerator(row, column);
+                var number = getNumber(row, column);
                 field = field.SetElementAt(row, column, number);
             }
             return field;
         }
 
-        public static IEnumerable<CellPosition> EnumerateCellPositions(this IGameField field)
+        public static IEnumerable<CellPosition> EnumerateCellPositions<T>(this IGameField<T> field)
         {
             return
                 from row in Enumerable.Range(0, field.Height)
@@ -26,23 +26,23 @@ namespace SudokuSolver
                 select new CellPosition(row, column);
         }
         
-        public static int GetElementAt(this IGameField field, CellPosition position)
+        public static T GetElementAt<T>(this IGameField<T> field, CellPosition position)
         {
             return field.GetElementAt(position.Row, position.Column);
         }
         
-        public static IGameField SetElementAt(this IGameField field, CellPosition position, int value)
+        public static IGameField<T> SetElementAt<T>(this IGameField<T> field, CellPosition position, T value)
         {
             return field.SetElementAt(position.Row, position.Column, value);
         }
 
-        public static IEnumerable<int> GetRow(this IGameField field, int row)
+        public static IEnumerable<T> GetRow<T>(this IGameField<T> field, int row)
         {
             return Enumerable.Range(0, field.Width)
                 .Select(column => field.GetElementAt(row, column));
         }
 
-        public static IEnumerable<int> GetColumn(this IGameField field, int column)
+        public static IEnumerable<T> GetColumn<T>(this IGameField<T> field, int column)
         {
             return Enumerable.Range(0, field.Height)
                 .Select(row => field.GetElementAt(row, column));

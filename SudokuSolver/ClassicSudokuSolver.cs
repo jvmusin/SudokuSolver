@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SudokuSolver
 {
-    public class ClassicSudokuSolver : ISolver
+    public class ClassicSudokuSolver : ISudokuSolver
     {
         public int BlockHeight { get; protected set; }
         public int BlockWidth { get; protected set; }
@@ -15,18 +15,18 @@ namespace SudokuSolver
             BlockWidth = blockWidth;
         }
 
-        public IEnumerable<IGameField> GetAllSolutions(IGameField startState)
+        public IEnumerable<SudokuGameField> GetAllSolutions(SudokuGameField startState)
         {
             return FindSolutions(startState);
         }
 
-        public IGameField GetSolution(IGameField startState)
+        public SudokuGameField GetSolution(SudokuGameField startState)
         {
             var solution = GetAllSolutions(startState).Take(1).ToList();
             return solution.Any() ? solution.First() : null;
         }
 
-        private IEnumerable<IGameField> FindSolutions(IGameField field)
+        private IEnumerable<SudokuGameField> FindSolutions(SudokuGameField field)
         {
             if (field.Filled)
             {
@@ -41,7 +41,7 @@ namespace SudokuSolver
 
                 var availableNumbers = GetAvailableNumbers(field, position);
                 var solutions = availableNumbers
-                    .Select(newNumber => field.SetElementAt(position, newNumber))
+                    .Select(newNumber => (SudokuGameField) field.SetElementAt(position, newNumber))
                     .SelectMany(FindSolutions);
 
                 foreach (var solution in solutions)
@@ -50,7 +50,7 @@ namespace SudokuSolver
             }
         }
 
-        private IEnumerable<int> GetAvailableNumbers(IGameField field, CellPosition position)
+        private IEnumerable<int> GetAvailableNumbers(SudokuGameField field, CellPosition position)
         {
             var numbersInBlock = GetBlock(field, position);
             var numbersInRow = field.GetRow(position.Row);
@@ -62,7 +62,7 @@ namespace SudokuSolver
                 .Except(numbersInColumn);
         }
 
-        private IEnumerable<int> GetBlock(IGameField field, CellPosition position)
+        private IEnumerable<int> GetBlock(SudokuGameField field, CellPosition position)
         {
             var topLeftRow = position.Row / BlockHeight;
             var topLeftColumn = position.Column / BlockWidth;

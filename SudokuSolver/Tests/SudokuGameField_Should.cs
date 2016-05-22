@@ -6,18 +6,16 @@ using NUnit.Framework;
 namespace SudokuSolver.Tests
 {
     [TestFixture]
-    public class GameField_Should : TestBase
+    public class SudokuGameField_Should : TestBase
     {
-        private IGameField field;
+        private SudokuGameField field;
         private Func<int, int, int> byRowNumerator;
 
         [SetUp]
-        public override void SetUp()
+        public void SetUp()
         {
-            base.SetUp();
-
-            field = new GameField(5, 6);
-            byRowNumerator = (row, column) => row * field.Width + column;
+            field = new SudokuGameField(5, 6);
+            byRowNumerator = (row, column) => row*field.Width + column;
         }
 
         [Test]
@@ -25,7 +23,7 @@ namespace SudokuSolver.Tests
         {
             var height = 5;
             var width = 6;
-            field = new GameField(height, width);
+            field = new SudokuGameField(height, width);
 
             field.Height.Should().Be(height);
             field.Width.Should().Be(width);
@@ -38,14 +36,14 @@ namespace SudokuSolver.Tests
         {
             if (height > 0 && width > 0)
                 return;
-            Action create = () => new GameField(height, width);
+            Action create = () => new SudokuGameField(height, width);
             create.ShouldThrow<Exception>();
         }
 
         [Test]
         public void RememberCellValuesCorrectly()
         {
-            field = field.Fill(byRowNumerator);
+            field = (SudokuGameField) field.Fill(byRowNumerator);
 
             foreach (var position in field.EnumerateCellPositions())
             {
@@ -58,7 +56,7 @@ namespace SudokuSolver.Tests
         [Test]
         public void ReturnRealValuesOnGetRow()
         {
-            field = field.Fill(byRowNumerator);
+            field = (SudokuGameField) field.Fill(byRowNumerator);
 
             foreach (var row in Enumerable.Range(0, field.Height))
             {
@@ -72,7 +70,7 @@ namespace SudokuSolver.Tests
         [Test]
         public void ReturnRealValuesOnGetColumn()
         {
-            field = field.Fill(byRowNumerator);
+            field = (SudokuGameField) field.Fill(byRowNumerator);
 
             foreach (var column in Enumerable.Range(0, field.Width))
             {
@@ -94,14 +92,14 @@ namespace SudokuSolver.Tests
         [Test]
         public void SayThatItsNotFilled_WhenJustCreated()
         {
-            field.Filled.Should().BeFalse();
+            ((SudokuGameField) field).Filled.Should().BeFalse();
         }
 
         [Test]
         public void SayThatItsNotFilled_WhenThereAreSomeZeroCells()
         {
-            field = field.Fill(byRowNumerator);
-            field = field
+            field = (SudokuGameField) field.Fill(byRowNumerator);
+            field = (SudokuGameField) field
                 .SetElementAt(2, 3, 0)
                 .SetElementAt(0, 0, 0);
             field.Filled.Should().BeFalse();
@@ -110,15 +108,15 @@ namespace SudokuSolver.Tests
         [Test]
         public void SayThatItsFilled_WhenThereAreNoZeroCells()
         {
-            field = field.Fill(byRowNumerator);
-            field = field.SetElementAt(0, 0, 1);
+            field = (SudokuGameField) field.Fill(byRowNumerator);
+            field = (SudokuGameField) field.SetElementAt(0, 0, 1);
             field.Filled.Should().BeTrue();
         }
 
         [Test]
         public void ReturnGameFieldClass_OnSetElementAtMethod()
         {
-            field.SetElementAt(0, 0, 123).GetType().Should().Be<GameField>();
+            field.SetElementAt(0, 0, 123).GetType().Should().Be<SudokuGameField>();
         }
     }
 }

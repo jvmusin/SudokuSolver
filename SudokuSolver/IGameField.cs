@@ -1,13 +1,11 @@
 ﻿namespace SudokuSolver
 {
-    public interface IGameField
+    public interface IGameField<T>
     {
         int Height { get; }
         int Width { get; }
 
-        int GetElementAt(int row, int column);
-        IGameField SetElementAt(int row, int column, int value);
-
-        bool Filled { get; }
+        T GetElementAt(int row, int column);
+        IGameField<T> SetElementAt(int row, int column, T value);
     }
 }

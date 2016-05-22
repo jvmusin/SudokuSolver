@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SudokuSolver
 {
-    public class GameField : IGameField
+    public class SudokuGameField : IGameField<int>
     {
         public int Height => state.Length;
         public int Width => state[0].Length;
@@ -12,16 +12,16 @@ namespace SudokuSolver
 
         public int GetElementAt(int row, int column) => state[row][column];
 
-        public IGameField SetElementAt(int row, int column, int value)
+        public IGameField<int> SetElementAt(int row, int column, int value)
         {
-            var result = new GameField(this);
+            var result = new SudokuGameField(this);
             result.state[row][column] = value;
             return result;
         }
 
         public bool Filled => !state.Any(x => x.Contains(0));
         
-        public GameField(int height, int width)
+        public SudokuGameField(int height, int width)
         {
             if (width <= 0 || height <= 0)
                 throw new ArgumentOutOfRangeException("Size is not correct");
@@ -32,18 +32,18 @@ namespace SudokuSolver
                 .ToArray();
         }
 
-        public GameField(int height, int width, Func<int, int, int> numerator) : this(height, width)
+        public SudokuGameField(int height, int width, Func<int, int, int> getNumber) : this(height, width)
         {
             foreach (var position in this.EnumerateCellPositions())
             {
                 var row = position.Row;
                 var column = position.Column;
-                var number = numerator(row, column);
+                var number = getNumber(row, column);
                 state[row][column] = number;
             }
         }
 
-        public GameField(IGameField source) : this(source.Height, source.Width)
+        public SudokuGameField(IGameField<int> source) : this(source.Height, source.Width)
         {
             foreach (var position in source.EnumerateCellPositions())
             {
@@ -62,7 +62,7 @@ namespace SudokuSolver
 
         #region Equals and HashCode
 
-        protected bool Equals(IGameField other)
+        protected bool Equals(IGameField<int> other)
         {
             if (Height != other.Height || Width != other.Width)
                 return false;
@@ -76,7 +76,7 @@ namespace SudokuSolver
 
         public override bool Equals(object obj)
         {
-            var other = obj as IGameField;
+            var other = obj as IGameField<int>;
             return other != null && Equals(other);
         }
 
